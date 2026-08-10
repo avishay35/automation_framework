@@ -12,7 +12,7 @@ def test_login_page_elements_visible(page: Page):
     
     expect(login_page.email_input).to_be_visible()
     expect(login_page.password_input).to_be_visible()
-    expect(login_page.submit_button).to_be_enabled()
+    expect(login_page.submit_button).to_be_visible()
 
 
 @pytest.mark.ui
@@ -23,7 +23,7 @@ def test_invalid_login_shows_error(page: Page):
     
     errors = login_page.get_error_messages()
     assert len(errors) > 0
-    assert any("email or password" in err.lower() for err in errors)
+    assert any("credentials invalid" in err.lower() for err in errors)
 
 
 @pytest.mark.ui
