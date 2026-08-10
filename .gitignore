@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+
+# Environment Variables
+.env
+
+# Pytest / Coverage / Allure
+.pytest_cache/
+.coverage
+htmlcov/
+allure-results/
+allure-report/
+test-results/
+
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+
+# IDE
+.idea/
+.vscode/
+*.swp
