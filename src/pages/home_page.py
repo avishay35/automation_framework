@@ -12,8 +12,8 @@ class HomePage(BasePage):
 
         # Locators
         self.banner_title: Locator = page.get_by_role("heading", name="conduit")
-        self.global_feed_tab: Locator = page.get_by_role("button", name="Global Feed")
-        self.your_feed_tab: Locator = page.get_by_role("button", name="Your Feed")
+        self.global_feed_tab: Locator = page.get_by_role("link", name="Global Feed")
+        self.your_feed_tab: Locator = page.get_by_role("link", name="Your Feed")
         self.article_preview: Locator = page.locator(".article-preview")
         self.popular_tags: Locator = page.locator(".sidebar .tag-list a")
 
