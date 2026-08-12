@@ -2,6 +2,7 @@ import pytest
 from playwright.sync_api import Browser, BrowserContext, Page
 from config.settings import settings
 from src.api.auth_client import AuthClient
+from src.api.article_client import ArticleClient
 
 
 @pytest.fixture(scope="session")
@@ -75,3 +76,9 @@ def page(context: BrowserContext) -> Page:
     page = context.new_page()
     yield page
     page.close()
+
+
+@pytest.fixture(scope="function")
+def article_client(auth_token: str) -> ArticleClient:
+    """Provides a single ArticleClient instance pre-loaded with the session auth token."""
+    return ArticleClient(auth_token=auth_token)    
