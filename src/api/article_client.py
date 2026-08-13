@@ -1,5 +1,6 @@
 import httpx
 from src.api.base_api_client import BaseAPIClient
+from src.api.models.article import MultipleArticlesResponse, SingleArticleResponse
 
 
 class ArticleClient(BaseAPIClient):
@@ -8,6 +9,12 @@ class ArticleClient(BaseAPIClient):
     def get_articles(self, limit: int = 10, offset: int = 0) -> httpx.Response:
         """GET /articles - Fetches global feed articles."""
         return self.get("/articles", params={"limit": limit, "offset": offset})
+        
+    #def get_articles(self, limit: int = 10, offset: int = 0) -> tuple[httpx.Response, MultipleArticlesResponse | None]:
+    #    """GET /articles - Returns raw response and parsed Pydantic model if successful."""
+    #    res = self.get("/articles", params={"limit": limit, "offset": offset})
+    #    parsed = self.validate_response(res, MultipleArticlesResponse) if res.status_code == 200 else None
+    #    return res, parsed    
 
     def create_article(self, title: str, description: str, body: str, tags: list[str] = None) -> httpx.Response:
         """POST /articles - Creates a new article."""

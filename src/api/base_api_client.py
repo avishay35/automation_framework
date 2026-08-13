@@ -1,9 +1,12 @@
 import httpx
 import logging
+from typing import Type, TypeVar
+from pydantic import BaseModel, ValidationError
 from config.settings import settings
 
 logger = logging.getLogger(__name__)
 
+T = TypeVar("T", bound=BaseModel)
 
 class BaseAPIClient:
     """Core HTTP client wrapper managing base URLs, authorization state, and headers."""
@@ -26,6 +29,20 @@ class BaseAPIClient:
         if self.auth_token:
             headers["Authorization"] = f"Token {self.auth_token}"
         return headers
+        
+    def validate_response(self, response: httpx.Response, model_cls: Type[T]) -> T:
+        """Parses and validates HTTP response JSON against a Pydantic model with rich debugging context."""
+        payload = response.json()
+        try:
+            return model_cls(**payload)
+        except ValidationError as err:
+            logger.error(
+                f"\n❌ [CONTRACT VIOLATION] {model_cls.__name__}\n"
+                f"URL: {response.request.url}\n"
+                f"Received Payload Sample: {str(payload)[:300]}...\n"
+                f"Validation Errors:\n{err}"
+            )
+            raise AssertionError(f"API Contract Violation on {model_cls.__name__}: {err}") from err    
 
     def get(self, endpoint: str, params: dict = None) -> httpx.Response:
         """Executes HTTP GET request."""

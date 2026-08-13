@@ -11,7 +11,9 @@ def test_get_global_articles_contract(article_client: ArticleClient):
 
     assert response.status_code == 200
     
-    parsed_data = MultipleArticlesResponse(**response.json())
+    #old: parsed_data = MultipleArticlesResponse(**response.json())
+    # ---Uses the base client validator for clear contract error logging if it fails
+    parsed_data = article_client.validate_response(response, MultipleArticlesResponse)
     assert isinstance(parsed_data.articles, list)
     assert len(parsed_data.articles) <= 5
 
@@ -33,7 +35,9 @@ def test_create_and_delete_article(article_client: ArticleClient):
     )
     assert create_res.status_code in (200, 201)
 
-    created_article = SingleArticleResponse(**create_res.json()).article
+    # old: created_article = SingleArticleResponse(**create_res.json()).article
+    parsed_article = article_client.validate_response(create_res, SingleArticleResponse)
+    created_article = parsed_article.article
     assert created_article.title == unique_title
     assert created_article.description == description
     slug = created_article.slug
