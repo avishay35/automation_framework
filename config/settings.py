@@ -12,14 +12,13 @@ class Settings(BaseSettings):
     default_timeout_ms: int = 10000
     api_timeout_sec: float = 10.0
 
-    # THE FIX: Explicitly alias the fields to guarantee they map to the uppercase cloud variables
     user_email: str = Field(
-        default="testuser_conduit@example.com", 
-        validation_alias="USER_EMAIL"
+        default="testuser_conduit@example.com",
+        env="USER_EMAIL"
     )
     user_password: str = Field(
-        default="TestPassword123!", 
-        validation_alias="USER_PASSWORD"
+        default="TestPassword123!",
+        env="USER_PASSWORD"
     )
 
     # Execution Settings
