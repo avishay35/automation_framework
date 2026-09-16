@@ -9,7 +9,8 @@ class AuthClient:
     """API client dedicated to authentication operations."""
 
     def __init__(self, base_url: str = None) -> None:
-        self.base_url = base_url or str(settings.api_base_url)
+        #self.base_url = base_url or str(settings.api_base_url)
+        self.base_url = "https://api.realworld.show/api"
 
     def login_and_get_token(self, email: str, password: str) -> str:
         """Executes a POST request to /users/login and returns the JWT authorization token."""
