@@ -1,3 +1,4 @@
+print("DEBUG: LOADED auth_client FROM:", __file__, file=sys.stderr)
 import httpx
 import sys
 import logging
