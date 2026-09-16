@@ -1,8 +1,10 @@
 import pytest
+import uuid
 from playwright.sync_api import Browser, BrowserContext, Page
 from config.settings import settings
 from src.api.auth_client import AuthClient
 from src.api.article_client import ArticleClient
+from src.api.models.article import SingleArticleResponse
 
 
 @pytest.fixture(scope="session")
@@ -82,3 +84,37 @@ def page(context: BrowserContext) -> Page:
 def article_client(auth_token: str) -> ArticleClient:
     """Provides a single ArticleClient instance pre-loaded with the session auth token."""
     return ArticleClient(auth_token=auth_token)    
+    
+ 
+@pytest.fixture(scope="function")
+def created_article(article_client: ArticleClient):
+    """ Hybrid Fixture:
+    1. Pre-seeds a unique article via API.
+    2. Yields the created article object to the UI test.
+    3. Guarantees cleanup (DELETE via API) after the test finishes.
+    """
+    unique_title = f"Hybrid Article {uuid.uuid4().hex[:8]}"
+    description = "Automated test article created via API for UI validation."
+    body = "This article was created via API setup and will be cleaned up via API teardown"
+    tags = ["hybrid", "pytest"]
+    
+    # --- SETUP (API) ---
+    response = article_client.create_article(
+        title=unique_title,
+        description=description,
+        body=body,
+        tags=tags
+    )
+    
+    assert response.status_code in (200,201), f"Fixture setup failed: {response.text}"
+    
+    # Here this should use the BaseAPIClient ValidateResponse method
+    article_data = SingleArticleResponse(**response.json()).article
+    
+    # --- YIELD TO TEST ---
+    yield article_data
+    
+    # --- TEARDOWN (API) ---
+    # Runs regardless of wether the test passed, failed, or threw an exception
+    delete_res = article_client.delete_article(article_data.slug)
+    assert delete_res.status_code in (200,201,204), f"Fixture teardown failed: {delete_res.text}"
