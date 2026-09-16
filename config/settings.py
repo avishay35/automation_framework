@@ -1,18 +1,24 @@
 import os
-from pydantic import HttpUrl
-from pydantic import Field
+from pydantic import HttpUrl, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
     # Base URLs
-    base_url: HttpUrl = "https://demo.realworld.show"
-    api_base_url: HttpUrl = "https://demo.realworld.show/api"
+    base_url: HttpUrl = Field(
+        default="https://demo.realworld.show",
+        env="BASE_URL"
+    )
+    api_base_url: HttpUrl = Field(
+        default="https://demo.realworld.show/api",
+        env="API_BASE_URL"
+    )
 
-    # Timeouts (in milliseconds for Playwright, seconds for HTTPX)
+    # Timeouts
     default_timeout_ms: int = 10000
     api_timeout_sec: float = 10.0
 
+    # Auth
     user_email: str = Field(
         default="testuser_conduit@example.com",
         env="USER_EMAIL"
@@ -23,16 +29,15 @@ class Settings(BaseSettings):
     )
 
     # Execution Settings
-    headless: bool = True
+    headless: bool = Field(default=True, env="HEADLESS")
     slow_mo: int = 0
 
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
-        env_ignore_empty=True,  # Ignores empty env strings if they slip through
+        env_ignore_empty=True,
         extra="ignore"
     )
 
 
-# Global settings instance
 settings = Settings()
