@@ -1,5 +1,6 @@
 import os
 from pydantic import HttpUrl
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
