@@ -4,7 +4,7 @@ import logging
 from config.settings import settings
 
 logger = logging.getLogger(__name__)
-print("DEBUG: LOADED auth_client FROM:", __file__, file=sys.stderr)
+#print("DEBUG: LOADED auth_client FROM:", __file__, file=sys.stderr)
 
 class AuthClient:
     """API client dedicated to authentication operations."""
