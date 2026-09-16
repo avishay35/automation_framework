@@ -1,4 +1,5 @@
 import httpx
+import sys
 import logging
 from config.settings import settings
 
@@ -22,12 +23,26 @@ class AuthClient:
         }
 
         logger.info(f"Requesting JWT token from API endpoint: {url}")
+
+        print("DEBUG: Before POST", file=sys.stderr)
+
+        try:
+            with httpx.Client(timeout=30.0) as client:
+                response = client.post(url, json=payload)
+        except Exception as e:
+            print("DEBUG: POST exception:", e, file=sys.stderr)
+            raise
+
+        print("DEBUG: After POST", file=sys.stderr)
+        print("DEBUG: Status:", response.status_code, file=sys.stderr)
+        print("DEBUG: Body:", response.text, file=sys.stderr)
         
-        with httpx.Client(timeout=10.0) as client:
-            response = client.post(url, json=payload)
-            response.raise_for_status()
-            data = response.json()
+        #with httpx.Client(timeout=10.0) as client:
+        #    response = client.post(url, json=payload)
+        response.raise_for_status()
+        data = response.json()
             
-            token = data["user"]["token"]
-            logger.info("Successfully retrieved JWT authentication token.")
-            return token
+        token = data["user"]["token"]
+        logger.info("Successfully retrieved JWT authentication token.")
+         print("DEBUG: token:", token, file=sys.stderr)
+        return token
