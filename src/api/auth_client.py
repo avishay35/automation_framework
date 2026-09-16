@@ -20,6 +20,8 @@ class AuthClient:
                 "password": password
             }
         }
+        print(f"DEBUG: url: {url}")
+        print(f"DEBUG: email: {email} :Password {password}")
 
         logger.info(f"Requesting JWT token from API endpoint: {url}")
         
