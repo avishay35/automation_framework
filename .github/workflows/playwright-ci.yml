@@ -21,11 +21,11 @@ jobs:
         
         - name: Run Playwright tests
           env: 
-            BASE_URL: ${{secrets.BASE_URL}}
-            API_BASE_URL: ${{secrets.API_BASE_URL}}
-            HEADLESS: ${{secrets.HEADLESS}}
-            USER_EMAIL: ${{secrets.USER_EMAIL}}
-            USER_PASSWORD: ${{secrets.USER_PASSWORD}}
+            BASE_URL: ${{ secrets.BASE_URL }}
+            API_BASE_URL: ${{ secrets.API_BASE_URL }}
+            HEADLESS: ${{ secrets.HEADLESS }}
+            USER_EMAIL: ${{ secrets.USER_EMAIL }}
+            USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
           run: pytest --browser chromium --junitxml-results.xml
         
         - name: Upload Test Results
