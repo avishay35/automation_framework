@@ -41,7 +41,7 @@ jobs:
             USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
           run: |
             python - << 'EOF'
-            from settings import settings
+            from config.settings import settings
             print("Pydantic Settings Loaded:")
             print("base_url:", settings.base_url)
             print("api_base_url:", settings.api_base_url)
