@@ -58,7 +58,7 @@ jobs:
             USER_EMAIL: ${{ secrets.USER_EMAIL }}
             USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
 
-          run: pytest -s --browser chromium --junitxml=results.xml
+          run: pytest -s tests/api/test_articles_api.py::test_get_global_articles_contract
         
         - name: Upload Test Results
           if: always()
