@@ -1,11 +1,10 @@
-print("DEBUG: LOADED auth_client FROM:", __file__, file=sys.stderr)
 import httpx
 import sys
 import logging
 from config.settings import settings
 
 logger = logging.getLogger(__name__)
-
+print("DEBUG: LOADED auth_client FROM:", __file__, file=sys.stderr)
 
 class AuthClient:
     """API client dedicated to authentication operations."""
