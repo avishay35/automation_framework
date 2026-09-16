@@ -57,7 +57,7 @@ jobs:
             HEADLESS: ${{ secrets.HEADLESS }}
             USER_EMAIL: ${{ secrets.USER_EMAIL }}
             USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
-          run: pytest --browser chromium --junitxml=results.xml
+          run: pytest -s --browser chromium --junitxml=results.xml
         
         - name: Upload Test Results
           if: always()
