@@ -16,6 +16,9 @@ def global_settings():
 @pytest.fixture(scope="session")
 def auth_token() -> str:
     """Session-scoped fixture to obtain a single JWT token for test user."""
+    print("DEBUG: Using base_url:", settings.base_url)
+    print("DEBUG: Using api_base_url:", settings.api_base_url)
+    print("DEBUG: Using user_email:", settings.user_email)
     auth_client = AuthClient()
     return auth_client.login_and_get_token(
         email=settings.user_email,
