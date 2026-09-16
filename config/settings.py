@@ -12,9 +12,15 @@ class Settings(BaseSettings):
     default_timeout_ms: int = 10000
     api_timeout_sec: float = 10.0
 
-    # Test User Credentials (overridable via .env)
-    user_email: str = "testuser_conduit@example.com"
-    user_password: str = "TestPassword123!"
+    # THE FIX: Explicitly alias the fields to guarantee they map to the uppercase cloud variables
+    user_email: str = Field(
+        default="testuser_conduit@example.com", 
+        validation_alias="USER_EMAIL"
+    )
+    user_password: str = Field(
+        default="TestPassword123!", 
+        validation_alias="USER_PASSWORD"
+    )
 
     # Execution Settings
     headless: bool = True
