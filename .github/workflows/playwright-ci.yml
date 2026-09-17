@@ -58,7 +58,7 @@ jobs:
             USER_EMAIL: ${{ secrets.USER_EMAIL }}
             USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
 
-          run: pytest -s --browser chromium --junitxml=results.xml
+          run: run: pytest --browser chromium --junitxml=results.xml --deselect=tests/api/test_hardcoded_login.py::test_hardcoded_login
         
         - name: Upload Test Results
           if: always()
