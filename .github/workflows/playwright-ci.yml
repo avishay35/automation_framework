@@ -1,0 +1,68 @@
+name: Playwright Tests CI
+
+on:
+    pull_request:
+        branches: [main]
+
+jobs:
+    run-tests:
+        runs-on: ubuntu-latest
+        container:
+            image: mcr.microsoft.com/playwright/python:v1.63.0-jammy
+        
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+          
+        - name: Install Dependencies
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+        - name: Debug environment variables
+          env:
+            BASE_URL: ${{ secrets.BASE_URL }}
+            API_BASE_URL: ${{ secrets.API_BASE_URL }}
+            HEADLESS: ${{ secrets.HEADLESS }}
+            USER_EMAIL: ${{ secrets.USER_EMAIL }}
+            USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+          run: |
+            echo "BASE_URL=$BASE_URL"
+            echo "API_BASE_URL=$API_BASE_URL"
+            echo "HEADLESS=$HEADLESS"
+            echo "USER_EMAIL=$USER_EMAIL"
+            echo "USER_PASSWORD=$USER_PASSWORD"
+
+        - name: Debug Pydantic Settings
+          env:
+            BASE_URL: ${{ secrets.BASE_URL }}
+            API_BASE_URL: ${{ secrets.API_BASE_URL }}
+            HEADLESS: ${{ secrets.HEADLESS }}
+            USER_EMAIL: ${{ secrets.USER_EMAIL }}
+            USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+          run: |
+            python - << 'EOF'
+            from config.settings import settings
+            print("Pydantic Settings Loaded:")
+            print("base_url:", settings.base_url)
+            print("api_base_url:", settings.api_base_url)
+            print("headless:", settings.headless)
+            print("user_email:", settings.user_email)
+            print("user_password:", settings.user_password)
+            EOF
+                
+        - name: Run Playwright tests
+          env: 
+            BASE_URL: ${{ secrets.BASE_URL }}
+            API_BASE_URL: ${{ secrets.API_BASE_URL }}
+            HEADLESS: ${{ secrets.HEADLESS }}
+            USER_EMAIL: ${{ secrets.USER_EMAIL }}
+            USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+
+          run: pytest --browser chromium --junitxml=results.xml --deselect=tests/api/test_hardcoded_login.py::test_hardcoded_login
+        
+        - name: Upload Test Results
+          if: always()
+          uses: actions/upload-artifact@v4
+          with:
+            name: pytest-results
+            path: results.xml
