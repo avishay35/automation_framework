@@ -58,7 +58,7 @@ jobs:
             USER_EMAIL: ${{ secrets.USER_EMAIL }}
             USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
 
-          run: pytest -s --browser chromium --junitxml=results.xml
+          run: pytest -s --browser chromium --junitxml=results.xml tests/e2e/test_hybrid_article.py::test_view_api_created_article_in_ui
         
         - name: Upload Test Results
           if: always()
